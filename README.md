@@ -1,2 +1,2 @@
 # test_for_actions
-GitHub Actions を試すためのupstreamリポジトリ
+GitHub Actions を試すためのフォークリポジトリ
