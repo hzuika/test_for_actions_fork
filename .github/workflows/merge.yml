@@ -144,6 +144,7 @@ jobs:
         run: |
           echo ${{ startsWith(env.MERGE_OUTPUT, 'Already up to date.') }}
           echo ${{ startsWith(env.MERGE_OUTPUT, 'Already') }}
+          echo `[[ "${{ env.MERGE_OUTPUT }}" == "Already up to date." ]]`
 
           if [[ "${{ env.MERGE_OUTPUT }}" == "Already up to date." ]]; then
             echo "This repository is up to date."
