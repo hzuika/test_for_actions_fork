@@ -34,17 +34,14 @@ jobs:
           git config --global user.name "$USER_NAME"
           
       - name: Create and Checkout new branch
-        run: |
-          git checkout -b "$BRANCH"
+        run: git checkout -b "$BRANCH"
           
       - name: Set upstream repo
-        run: |
-          git remote add upstream ${UPSTREAM}
+        run: git remote add upstream ${UPSTREAM}
           
       # デフォルトでfetch-depthが1(shallow clone)なので，mergeするときに，fatal: refusing to merge unrelated historiesが出るのを避ける
       - name: Fetch upstream repo
-        run: |
-          git fetch upstream --unshallow
+        run: git fetch upstream --unshallow
           
       # upstreamをmergeするが，コンフリクト(エラー)が出てもワークフローを終了させない．
       # マージしたときの出力(コンフリクトのエラーメッセージを変数に格納する
@@ -67,8 +64,7 @@ jobs:
         run: git commit -am "Merge from upstream"
           
       - name: Push this branch to origin
-        run: |
-          git push origin "$BRANCH"
+        run: git push origin "$BRANCH"
           
       # upstream を設定すると，プルリクエストの対象がデフォルトでupstreamになるため，`--repo`で明示的に指定する．
       # gh コマンドでプルリクエストを作成するためには，GH_TOKENが必要
