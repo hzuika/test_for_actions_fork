@@ -11,6 +11,8 @@ env:
   BRANCH: auto_merge
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   UPSTREAM: https://github.com/snowatfeet/test_for_actions.git
+  USER_EMAIL: 39191601+hzuika@users.noreply.github.com
+  USER_NAME: hzuika
   
 jobs:
   build:
