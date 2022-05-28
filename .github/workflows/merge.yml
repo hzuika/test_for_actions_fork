@@ -34,7 +34,7 @@ jobs:
         run: |
           git merge --allow-unrelated-histories upstream/main
       - run: |
-          git commit -am "confict marker"
+          git commit -am "Merge from upstream"
       - run: |
           git push origin "$BRANCH"
       - run: |
