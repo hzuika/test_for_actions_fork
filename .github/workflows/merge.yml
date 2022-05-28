@@ -10,6 +10,7 @@ on:
 env:
   BRANCH: auto_merge
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  UPSTREAM: https://github.com/snowatfeet/test_for_actions.git
   
 jobs:
   build:
@@ -20,12 +21,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          git status
+          git checkout -b "$BRANCH"
       - run: |
           git branch
       - run: |
+          git remote add upstream ${UPSTREAM}
+      - run: |
           git remote -v
-          #git checkout -b "$BRANCH"
           #git fetch upstream
           #git merge upstream/main
           #git commit -am "conflict marker"
