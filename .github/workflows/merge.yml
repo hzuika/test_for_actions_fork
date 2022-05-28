@@ -36,7 +36,8 @@ jobs:
       - run: |
           git commit -am "confict marker"
       - run: |
-          #git push origin "$BRANCH"
+          git push origin "$BRANCH"
+      - run: |
           gh pr create --head "$BRANCH" --base "main" --repo "hzuika/test_for_actions_fork" -t "Auto merge" -b ""
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
