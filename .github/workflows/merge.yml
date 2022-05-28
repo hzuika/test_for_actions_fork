@@ -30,6 +30,7 @@ jobs:
           git remote add upstream ${UPSTREAM}
       - run: |
           git fetch upstream
+      # upstreamをmergeするが，コンフリクト(エラー)が出ても続ける．
       - continue-on-error: true
         run: |
           git merge --allow-unrelated-histories upstream/main
