@@ -145,6 +145,7 @@ jobs:
       
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge
+        if: ${{ steps.merge.outputs.EXIT_CODE != 0 }}
         run: git commit -am "Merge from upstream"
       
       # リモートリポジトリにプッシュする．          
