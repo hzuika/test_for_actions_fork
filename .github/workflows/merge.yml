@@ -48,7 +48,9 @@ jobs:
           echo "HOUR=${T:8:2}" >> $GITHUB_ENV
           echo "MIN=${T:10:2}" >> $GITHUB_ENV
           echo "SEC=${T:12:2}" >> $GITHUB_ENV
-          echo "${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
+          
+      - name: Show current time
+        run: echo "${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
           
       # ブランチ名は別のrunでも使用するので環境変数に入れる．
       - name: Create branch name as env var
