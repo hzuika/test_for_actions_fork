@@ -57,13 +57,14 @@ jobs:
           #複数行の文字列を格納するために環境変数を使う．
           git merge upstream/main >> merge_output.txt
       
-      - run: cat merge_output.txt
+      - name: Show merge output
+        run: cat merge_output.txt
 
-      - run: echo 'MERGE_OUTPUT=$(cat merge_output.txt)' >> $GITHUB_ENV
+      - name: Set merge output to env
+        run: echo 'MERGE_OUTPUT=$(cat merge_output.txt)' >> $GITHUB_ENV
           
       - name: Commit merge
-        run: |
-          git commit -am "Merge from upstream"
+        run: git commit -am "Merge from upstream"
           
       - name: Push this branch to origin
         run: |
