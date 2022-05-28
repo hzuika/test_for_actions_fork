@@ -144,7 +144,6 @@ jobs:
           A: Hello
         run: |
           echo "${{ env.A == 'Hello' }}"
-          echo "${{ env.A == Hello }}
           
           if [[ "${{ env.MERGE_OUTPUT }}" == "Already up to date." ]]; then
             echo "This repository is up to date."
