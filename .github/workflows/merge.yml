@@ -105,19 +105,20 @@ jobs:
       - name: Show merge output
         run: |
           echo "Exit code: ${{ steps.merge.outputs.EXIT_CODE }}"
+          echo "stdout:"
           echo "${{ steps.merge.outputs.STDOUT }}"
+          echo "stderr:"
           echo "${{ steps.merge.outputs.STDERR }}"
 
-#       - name: Merge upstream repo
-#         id: merge
-#         continue-on-error: true
-#         run: |
-#           git merge upstream/main > ../merge_output.txt
+      - name: Set merge output upstream repo
+        run: |
+          ${{ steps.merge.outputs.STDOUT }} > ../merge_output.txt
+          ${{ steps.merge.outputs.STDERR }} >> ../merge_output.txt
           
       # テキストファイルの内容を環境変数に格納する．
       - name: Set merge output to env
         run: |
-          echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV
+          echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
       - name: Show merge output
@@ -131,7 +132,7 @@ jobs:
       
       - name: Check Already up to date.
         run: |
-          if [ "${{ env.MERGE_OUTPUT }}" = "Already up to date." ]; then
+          if [ "${{ steps.merge.outputs.STDOUT }}" = "Already up to date." ]; then
             echo "This repository is up to date."
             exit 1
           else
