@@ -104,9 +104,11 @@ jobs:
             exit 1
           else
             echo "Need to merge."
+            exit 0
           fi
       
-      - run: git status
+      - name: Git status
+        run: git status
       
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge
