@@ -149,7 +149,7 @@ jobs:
       - run: git show
       
       # コンフリクトマーカーごとコミットする．          
-      - name: Commit merge
+      - name: Commit merge with conflict marker
         if: ${{ steps.merge.outputs.EXIT_CODE != 0 }}
         run: git commit -am "Merge from upstream"
       
