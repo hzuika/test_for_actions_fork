@@ -35,9 +35,8 @@ jobs:
         run: |
           git merge --allow-unrelated-histories upstream/main
       - run: |
-          git status
-          #git commit -am "confict marker"
-          git show
-          #git commit -am "conflict marker"
-          #git push origin "$BRANCH"
-          #gh pr create -B "main" -t "Auto merge" -b ""
+          git commit -am "confict marker"
+      - run: |
+          git push origin "$BRANCH"
+      - run: |
+          gh pr create -B "main" -t "Auto merge" -b ""
