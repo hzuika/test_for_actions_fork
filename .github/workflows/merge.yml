@@ -106,6 +106,11 @@ jobs:
           echo ${{ contains(env.MERGE_OUTPUT, 'Already up to date.') }}
           echo [["${{ env.MERGE_OUTPUT }}"  == 'Already up to date.']]
           echo [["${{ env.MERGE_OUTPUT }}"  == 'Already up to date.\n']]
+          if [ "${{ env.MERGE_OUTPUT }}" = "Already up to date." ]; then
+            echo "String1 and String2 are equal."
+          else
+            echo "String1 and String2 are not equal."
+          fi
           echo "No need to merge."
           exit 1
       
