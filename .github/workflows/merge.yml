@@ -21,10 +21,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # checkoutしないと，ワークフロー時の環境にこのリポジトリが存在しないことになる
       - uses: actions/checkout@v3
+      # (マージ)コミットするときに必要な情報
       - run: |
           git config --global user.email "$USER_EMAIL"
           git config --global user.name "$USER_NAME"
+      # 新規ブランチの作成
       - run: |
           git checkout -b "$BRANCH"
       - run: |
@@ -40,7 +43,8 @@ jobs:
           git commit -am "Merge from upstream"
       - run: |
           git push origin "$BRANCH"
-      # upstream を設定したため，プルリクエストの対象を`--repo`で明示的に指定する．
+      # upstream を設定すると，プルリクエストの対象がデフォルトでupstreamになるため，`--repo`で明示的に指定する．
+      # gh コマンドでプルリクエストを作成するためには，GH_TOKENが必要
       - run: |
           gh pr create --head "$BRANCH" --base "main" --repo "$REPO" -t "Auto merge" -b ""
         env:
