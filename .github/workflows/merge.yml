@@ -55,10 +55,9 @@ jobs:
           #改行文字はエスケープしないと一行しか入れることができない
           #echo "::set-output name=MERGE_OUTPUT::$(git merge upstream/main)"
           #複数行の文字列を格納するために環境変数を使う．
-          echo 'MERGE_OUTPUT<<EOF' >> $GITHUB_ENV
-          git merge upstream/main >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          echo ${GITHUB_ENV}
+          git merge upstream/main >> merge_output.txt
+          cat merge_output.txt
+          echo 'MERGE_OUTPUT=$(cat merge_output.txt)' >> $GITHUB_ENV
           
       - name: Commit merge
         run: |
