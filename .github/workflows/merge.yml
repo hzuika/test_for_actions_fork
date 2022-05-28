@@ -38,6 +38,7 @@ jobs:
           git commit -am "Merge from upstream"
       - run: |
           git push origin "$BRANCH"
+      # upstream を設定したため，プルリクエストの対象を`--repo`で明示的に指定する．
       - run: |
           gh pr create --head "$BRANCH" --base "main" --repo "hzuika/test_for_actions_fork" -t "Auto merge" -b ""
         env:
