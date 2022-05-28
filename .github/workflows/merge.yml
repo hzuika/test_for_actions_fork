@@ -96,8 +96,9 @@ jobs:
       
       # マージ出力が Already up to date. であれば強制終了する．
       - name: Check Already up to date.
-        if: ${{ env.MERGE_OUTPUT  == 'Already up to date.\n'}}
+        #if: ${{ env.MERGE_OUTPUT  == 'Already up to date.\n'}}
         run: |
+          echo ${{ env.MERGE_OUTPUT  == 'Already up to date.\n'}}
           echo "No need to merge."
           exit 1
       
