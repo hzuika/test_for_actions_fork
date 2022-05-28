@@ -39,4 +39,4 @@ jobs:
       - run: |
           git push origin "$BRANCH"
       - run: |
-          gh pr create -B "main" -t "Auto merge" -b ""
+          gh pr create -h "$BRANCH$ -B "main" -t "Auto merge" -b ""
