@@ -93,7 +93,7 @@ jobs:
         id: merge
         continue-on-error: true
         run: |
-          git merge upstream/main --no-commit >> ../merge_output.txt
+          git merge upstream/main --no-commit > ../merge_output.txt
           
       # テキストファイルの内容を環境変数に格納する．
       - name: Set merge output to env
