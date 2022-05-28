@@ -89,15 +89,34 @@ jobs:
       # echo "::set-output name=MERGE_OUTPUT::$(git merge upstream/main)" だと，改行以降が入らない．
       # 改行文字をエスケープしないといけないらしいが，やり方がわからなかった．
       
-      - name: Merge upstream repo
+      
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const command = 'git merge upstream/main'
+            const result = await exec.getExecOutput(command, [], {
+              ignoreReturnCode: true,
+            })
+            core.setOutput('EXIT_CODE', result.exitCode)
+            core.setOutput('STDOUT', result.stdout)
+            core.setOutput('STDERR', result.stderr)
         id: merge
-        continue-on-error: true
-        run: |
-          git merge upstream/main --no-commit > ../merge_output.txt
+      
+      - run: |
+          echo ${{ steps.merge.outputs.STDOUT }}
+          echo ${{ steps.merge.outputs.STDERR }}
+          echo ${{ steps.merge.outputs.EXIT_CODE }}
+
+#       - name: Merge upstream repo
+#         id: merge
+#         continue-on-error: true
+#         run: |
+#           git merge upstream/main > ../merge_output.txt
           
       # テキストファイルの内容を環境変数に格納する．
       - name: Set merge output to env
-        run: echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
+        run: |
+          echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
       - name: Show merge output
