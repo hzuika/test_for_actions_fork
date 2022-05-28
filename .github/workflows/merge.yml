@@ -78,20 +78,7 @@ jobs:
         run: git fetch upstream --unshallow
       
       # upstreamをマージする．
-      
       # github-scriptsを使って，終了コード，標準出力，標準エラー出力を変数に格納する．
-      
-      # コンフリクトマーカーが生成されてエラーになるが，
-      # continue-on-error: true をつけることで，
-      # コンフリクト(エラー)が出てもワークフローを終了させずに次のrunへ進む．
-
-      # マージしたときの出力(コンフリクトのエラーメッセージを変数に格納してプルリクエストの本文で使用する．
-      # 複数行の文字列を格納するために一度，テキストファイルに入れてから環境変数に格納する．
-      # 保存先がカレントディレクトリだと，未追跡ファイルになってしまうため，親ディレクトリに保存する
-
-      # echo "::set-output name=MERGE_OUTPUT::$(git merge upstream/main)" だと，改行以降が入らない．
-      # 改行文字をエスケープしないといけないらしいが，やり方がわからなかった．
-      
       
       - uses: actions/github-script@v6
         with:
@@ -113,37 +100,26 @@ jobs:
           echo "stderr:"
           echo "${{ steps.merge.outputs.STDERR }}"
 
-      # 標準出力か，標準エラー出力のどちらかを環境変数に格納する．
+      # 終了コードによって，標準出力か，標準エラー出力のどちらかを環境変数に格納する．
       # 一度テキストファイルに格納してから，環境変数に格納する．
       # テキストファイルはGitの対象にならないように親ディテクトリに保存する．
       # echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV だとエラーになる．
-      - name: Set merge output upstream repo
+      # シングルクォーテーションをダブルクォーテーションに変えてもエラー
+      - name: Set merge output as env var
         run: |
           if [ "${{ steps.merge.outputs.EXIT_CODE }}" == '0' ]; then
             echo "${{ steps.merge.outputs.STDOUT }}" > ../merge_output.txt
           else
             echo "${{ steps.merge.outputs.STDERR }}" > ../merge_output.txt
           fi
-          echo "MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}" >> $GITHUB_ENV
-          #echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
-
-                    
-      # テキストファイルの内容を環境変数に格納する．
-      # echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV だとエラーになる．
-#       - name: Set merge output to env
-#         run: |
-#           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
+          
+          echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
       - name: Show merge output
         run: echo ${{ env.MERGE_OUTPUT }}
       
       # マージ出力が Already up to date. であれば強制終了する．
-      
-      # これらはなぜか false だった．
-      # echo ${{ env.MERGE_OUTPUT  == 'Already up to date.'}}
-      # echo ${{ contains(env.MERGE_OUTPUT, 'Already up to date.') }}
-      
       - name: Check Already up to date.
         run: |
           if [ "${{ env.MERGE_OUTPUT }}" = "Already up to date." ]; then
@@ -179,4 +155,5 @@ jobs:
         run: |
           PR_BODY="${{ env.MERGE_OUTPUT }}"
           TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
-          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "Auto merge upstream (${TIME})" --body "${PR_BODY}"
+          PR_TITLE="Auto merge upstream (${TIME})"
+          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "${PR_TITLE}" --body "${PR_BODY}"
