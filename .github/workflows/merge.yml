@@ -34,9 +34,9 @@ jobs:
       - continue-on-error: true
         run: |
           git merge --allow-unrelated-histories upstream/main
+      - run: |
           git status
           #git commit -am "confict marker"
-      - run: |
           git show
           #git commit -am "conflict marker"
           #git push origin "$BRANCH"
