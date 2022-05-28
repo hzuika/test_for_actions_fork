@@ -99,6 +99,10 @@ jobs:
         #if: ${{ env.MERGE_OUTPUT  == 'Already up to date.\n'}}
         run: |
           echo ${{ env.MERGE_OUTPUT  == 'Already up to date.\n'}}
+          echo ${{ env.MERGE_OUTPUT  == 'Already up to date.\\n'}}
+          echo ${{ env.MERGE_OUTPUT  == 'Already up to date.\r\n'}}
+          echo ${{ env.MERGE_OUTPUT  == 'Already up to date.'}}
+          echo ${{ env.MERGE_OUTPUT  == 'Already up to date. '}}
           echo "No need to merge."
           exit 1
       
