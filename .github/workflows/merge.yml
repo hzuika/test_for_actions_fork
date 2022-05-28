@@ -121,7 +121,8 @@ jobs:
       # テキストファイルの内容を環境変数に格納する．
       - name: Set merge output to env
         run: |
-          echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
+          #echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
+          echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
       - name: Show merge output
