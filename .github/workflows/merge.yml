@@ -27,7 +27,7 @@ jobs:
       - run: |
           git fetch upstream
       - run: |
-          git merge --no-edit --allow-unrelated-histories origin/main
+          git merge --no-edit --allow-unrelated-histories upstream/main
       - run: |
           git show
           #git commit -am "conflict marker"
