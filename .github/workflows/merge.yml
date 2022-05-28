@@ -36,7 +36,7 @@ jobs:
       - run: |
           git commit -am "confict marker"
       - run: |
-          #git push origin "$BRANCH"
+          git push origin "$BRANCH"
       - uses: actions/checkout@v3
       - run: |
           gh pr create --head "$BRANCH" --base "main" -t "Auto merge" -b ""
