@@ -58,6 +58,7 @@ jobs:
           echo 'MERGE_OUTPUT<<EOF' >> $GITHUB_ENV
           git merge upstream/main >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+          echo ${GITHUB_ENV}
           
       - name: Commit merge
         run: |
