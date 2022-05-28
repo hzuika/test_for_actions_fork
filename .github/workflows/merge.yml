@@ -29,12 +29,12 @@ jobs:
           git checkout -b "$BRANCH"
       - run: |
           git remote add upstream ${UPSTREAM}
+      # デフォルトでfetch-depthが1(shallow clone)なので，mergeするときに，fatal: refusing to merge unrelated historiesが出るのを避ける
       - run: |
           git fetch upstream --unshallow
-      # upstreamをmergeするが，コンフリクト(エラー)が出ても続ける．
+      # upstreamをmergeするが，コンフリクト(エラー)が出てもワークフローを終了させない．
       - continue-on-error: true
         run: |
-          #git merge --allow-unrelated-histories upstream/main
           git merge upstream/main
       - run: |
           git commit -am "Merge from upstream"
