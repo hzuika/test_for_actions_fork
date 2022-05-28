@@ -38,8 +38,9 @@ jobs:
           
       - name: Create and Checkout new branch
         run: |
-          echo "BRANCH=${BRANCH_PREFIX}_${{ env.CURRENT_TIME }}" >> $GITHUB_ENV
-          git checkout -b "${{ env.BRANCH }}"
+          BRANCH="${BRANCH_PREFIX}_${{ env.CURRENT_TIME }}"
+          echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
+          git checkout -b "$BRANCH"
           
       - name: Set upstream repo
         run: git remote add upstream ${UPSTREAM}
