@@ -26,15 +26,15 @@ jobs:
           git config --global user.name "$USER_NAME"
       - run: |
           git checkout -b "$BRANCH"
-      - run: |
-          git remote add upstream ${UPSTREAM}
-      - run: |
-          git fetch upstream
-      - continue-on-error: true
-        run: |
-          git merge --allow-unrelated-histories upstream/main
-      - run: |
-          git commit -am "confict marker"
+#       - run: |
+#           git remote add upstream ${UPSTREAM}
+#       - run: |
+#           git fetch upstream
+#       - continue-on-error: true
+#         run: |
+#           git merge --allow-unrelated-histories upstream/main
+#       - run: |
+#           git commit -am "confict marker"
       - run: |
           #git push origin "$BRANCH"
           gh pr create --head "$BRANCH" --base "main" -t "Auto merge" -b ""
