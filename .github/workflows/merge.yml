@@ -118,17 +118,6 @@ jobs:
       - name: Show merge output
         run: echo ${{ env.MERGE_OUTPUT }}
       
-      # マージ出力が Already up to date. であれば強制終了する．
-      - name: Check Already up to date.
-        run: |
-          if [[ "${{ steps.merge.outputs.STDOUT }}" == "Already up to date." ]]; then
-            echo "This repository is up to date."
-            exit 0
-          else
-            echo "The merge was done."
-            exit 0
-          fi
-      
       - name: Git status
         run: git status
         
@@ -139,22 +128,42 @@ jobs:
         if: ${{ steps.merge.outputs.EXIT_CODE != 0 }}
         run: git commit -am "Merge upstream with conflict marker"
       
-      # リモートリポジトリにプッシュする．          
-      - name: Push this branch to origin
-        if: ${{ steps.merge.outputs.STDOUT != "Already up to date." }}
-        run: git push origin "$BRANCH"
-          
-      # プルリクエストを作成する．
-      # upstream を設定すると，プルリクエストのマージ先がデフォルトでupstreamになるため，
-      # --repo オプションで明示的にリポジトリを指定する．
-      # gh コマンドでプルリクエストを作成するためには，GH_TOKENが必要になる．
-      # 環境変数に格納したマージ出力結果をプルリクエストの本文に使う．
-      - name: Create Pull Request
-        if: ${{ steps.merge.outputs.STDOUT != "Already up to date." }}
+      # マージ出力が Already up to date. であれば強制終了する．
+      - name: Check Already up to date.
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_BODY="${{ env.MERGE_OUTPUT }}"
-          TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
-          PR_TITLE="Auto merge upstream (${TIME})"
-          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "${PR_TITLE}" --body "${PR_BODY}"
+          if [[ "${{ steps.merge.outputs.STDOUT }}" == "Already up to date." ]]; then
+            echo "This repository is up to date."
+            exit 0
+          else
+            echo "The merge was done."
+            
+            git push origin "$BRANCH"
+            
+            PR_BODY="${{ env.MERGE_OUTPUT }}"
+            TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
+            PR_TITLE="Auto merge upstream (${TIME})"
+            gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "${PR_TITLE}" --body "${PR_BODY}"
+            
+            exit 0
+          fi
+          
+#       # リモートリポジトリにプッシュする．          
+#       - name: Push this branch to origin
+#         if: ${{ steps.merge.outputs.STDOUT != "Already up to date." }}
+#         run: git push origin "$BRANCH"
+          
+#       # プルリクエストを作成する．
+#       # upstream を設定すると，プルリクエストのマージ先がデフォルトでupstreamになるため，
+#       # --repo オプションで明示的にリポジトリを指定する．
+#       # gh コマンドでプルリクエストを作成するためには，GH_TOKENが必要になる．
+#       # 環境変数に格納したマージ出力結果をプルリクエストの本文に使う．
+#       - name: Create Pull Request
+#         env:
+#           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: |
+#           PR_BODY="${{ env.MERGE_OUTPUT }}"
+#           TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
+#           PR_TITLE="Auto merge upstream (${TIME})"
+#           gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "${PR_TITLE}" --body "${PR_BODY}"
