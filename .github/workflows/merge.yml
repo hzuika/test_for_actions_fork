@@ -31,12 +31,16 @@ jobs:
           git config --global user.email "$USER_EMAIL"
           git config --global user.name "$USER_NAME"
           
-      - name: Get current time and Create branch name then Set to env var
+      - name: Get current time as env var
         env:
           TZ: 'Asia/Tokyo'
         run: |
+          echo "CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
           CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')
-          BRANCH_NAME="${BRANCH_PREFIX}${CURRENT_TIME}"
+          
+      - name: Create branch name as env var
+        run: |
+          BRANCH_NAME="${BRANCH_PREFIX}${{ env.CURRENT_TIME }}"
           echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
           
       - name: Create and Checkout new branch
@@ -79,4 +83,4 @@ jobs:
       - name: Create Pull Request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$REPO" --title "Auto merge" --body "${{ env.MERGE_OUTPUT }}"
+        run: gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$REPO" --title "Auto merge (${{ env.CURRENT_TIME }})" --body "${{ env.MERGE_OUTPUT }}"
