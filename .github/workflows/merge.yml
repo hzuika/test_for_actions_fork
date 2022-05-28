@@ -5,14 +5,17 @@ name: Create branch, Merge upstream, Pull request
 # Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
+  # Actions タブから手動でこのワークフローを実行することを許可する
   workflow_dispatch:
   
 env:
+  # 日付も入れたい
   BRANCH: auto_merge
   UPSTREAM: https://github.com/snowatfeet/test_for_actions.git
   REPO: hzuika/test_for_actions_fork
   USER_EMAIL: 39191601+hzuika@users.noreply.github.com
   USER_NAME: hzuika
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
 jobs:
   build:
@@ -23,29 +26,38 @@ jobs:
     steps:
       # checkoutしないと，ワークフロー時の環境にこのリポジトリが存在しないことになる
       - uses: actions/checkout@v3
-      # (マージ)コミットするときに必要な情報
-      - run: |
+      # (マージ)コミットするときに必要なgit configの情報
+      - name: Set git config for merge commit
+        run: |
           git config --global user.email "$USER_EMAIL"
           git config --global user.name "$USER_NAME"
-      # 新規ブランチの作成
-      - run: |
+      - name: Create and Checkout new branch
+        run: |
           git checkout -b "$BRANCH"
+      - name: Set upstream repo
       - run: |
           git remote add upstream ${UPSTREAM}
       # デフォルトでfetch-depthが1(shallow clone)なので，mergeするときに，fatal: refusing to merge unrelated historiesが出るのを避ける
+      - name: Fetch upstream repo
       - run: |
           git fetch upstream --unshallow
       # upstreamをmergeするが，コンフリクト(エラー)が出てもワークフローを終了させない．
-      - continue-on-error: true
+      - name: Merge upstream repo
+        id: merge
+        continue-on-error: true
         run: |
-          git merge upstream/main
-      - run: |
+          #git merge upstream/main
+          # マージしたときの出力(コンフリクトのエラーメッセージを変数に格納する
+          echo "::set-output name=MERGE_OUTPUT::$(git merge upstream/main)"
+      - name: Commit merge
+        run: |
           git commit -am "Merge from upstream"
-      - run: |
+      - name: Push this branch to origin
+        run: |
           git push origin "$BRANCH"
       # upstream を設定すると，プルリクエストの対象がデフォルトでupstreamになるため，`--repo`で明示的に指定する．
       # gh コマンドでプルリクエストを作成するためには，GH_TOKENが必要
-      - run: |
-          gh pr create --head "$BRANCH" --base "main" --repo "$REPO" -t "Auto merge" -b ""
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Pull Request
+        run: |
+          # マージしたときの出力をプルリクエストの本文(
+          gh pr create --head "$BRANCH" --base "main" --repo "$REPO" --title "Auto merge" --body "${{ steps.merge.outputs.MERGE_OUTPUT }}"
