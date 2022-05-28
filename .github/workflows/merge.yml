@@ -36,18 +36,18 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
         run: |
-          echo "CURRENT_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+          CURRENT_TIME=$(date +'%Y%m%d%H%M%S')
+          echo "CURRENT_TIME=$(CURRENT_TIME)" >> $GITHUB_ENV
+          echo "YEAR=${T:0:4}" >> $GITHUB_ENV
+          echo "MONTH=${T:4:2}" >> $GITHUB_ENV
+          echo "DAY=${T:6:2}" >> $GITHUB_ENV
+          echo "HOUR=${T:8:2}" >> $GITHUB_ENV
+          echo "MIN=${T:10:2}" >> $GITHUB_ENV
+          echo "SEC=${T:12:2}" >> $GITHUB_ENV
           
       # ブランチ名は別のrunでも使用するので環境変数に入れる．
       - name: Create branch name as env var
         run: |
-          T="${{ env.CURRENT_TIME }}"
-          YEAR="${T:0:4}"
-          MONTH="${T:4:2}"
-          DAY="${T:6:2}"
-          HOUR="${T:8:2}"
-          MIN="${T:10:2}"
-          SEC="${T:12:2}"
           BRANCH_SUFFIX="${YEAR}_${MONTH}_${DAY}_${HOUR}_${MIN}_${SEC}"
           BRANCH_NAME="${BRANCH_PREFIX}${BRANCH_SUFFIX}"
           echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
@@ -99,12 +99,6 @@ jobs:
       
       - name: Check Already up to date.
         run: |
-          if ${{ (env.MERGE_OUTPUT == "Already up to date.")}} == 'true'; then
-            echo "Branch not found"
-            # do our things
-          else
-            echo "Branch found"
-          fi
           if [ "${{ env.MERGE_OUTPUT }}" = "Already up to date." ]; then
             echo "No need to merge."
             exit 1
@@ -131,12 +125,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          T="${{ env.CURRENT_TIME }}"
-          YEAR="${T:0:4}"
-          MONTH="${T:4:2}"
-          DAY="${T:6:2}"
-          HOUR="${T:8:2}"
-          MIN="${T:10:2}"
-          SEC="${T:12:2}"
           TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
           gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "Auto merge (${TIME})" --body "${{ env.MERGE_OUTPUT }}"
