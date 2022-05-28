@@ -25,18 +25,18 @@ jobs:
           git config --global user.email "$USER_EMAIL"
           git config --global user.name "$USER_NAME"
       - run: |
+          git checkout -b "$BRANCH"
+      - run: |
           git remote add upstream ${UPSTREAM}
       - run: |
-          git checkout -b "$BRANCH"
-#       - run: |
-#           git fetch upstream
-#       - continue-on-error: true
-#         run: |
-#           git merge --allow-unrelated-histories upstream/main
-#       - run: |
-#           git commit -am "confict marker"
+          git fetch upstream
+      - continue-on-error: true
+        run: |
+          git merge --allow-unrelated-histories upstream/main
+      - run: |
+          git commit -am "confict marker"
       - run: |
           #git push origin "$BRANCH"
-          gh pr create --head "$BRANCH" --base "main" -t "Auto merge" -b ""
+          gh pr create --head "$BRANCH" --base "main" --repo "hzuika/test_for_actions_fork" -t "Auto merge" -b ""
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
