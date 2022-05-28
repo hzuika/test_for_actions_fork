@@ -79,7 +79,6 @@ jobs:
       
       # upstreamをマージする．
       # github-scriptsを使って，終了コード，標準出力，標準エラー出力を変数に格納する．
-      
       - uses: actions/github-script@v6
         with:
           script: |
