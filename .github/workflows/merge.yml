@@ -91,7 +91,8 @@ jobs:
       - name: Set merge output to env
         run: echo 'MERGE_OUTPUT=$(cat merge_output.txt)' >> $GITHUB_ENV
         
-      - run: echo ${{ env.MERGE_OUTPUT }}
+      - name: Check MERGE_OUTPUT
+        run: echo ${{ env.MERGE_OUTPUT }}
       
       # マージ出力が Already up to date. であれば強制終了する．
       - name: Check Already up to date.
