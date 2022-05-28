@@ -26,10 +26,10 @@ jobs:
           git config --global user.name "$USER_NAME"
       - run: |
           git checkout -b "$BRANCH"
-#       - run: |
-#           git remote add upstream ${UPSTREAM}
-#       - run: |
-#           git fetch upstream
+      - run: |
+          git remote add upstream ${UPSTREAM}
+      - run: |
+          git fetch upstream
 #       - continue-on-error: true
 #         run: |
 #           git merge --allow-unrelated-histories upstream/main
