@@ -31,16 +31,17 @@ jobs:
           git config --global user.email "$USER_EMAIL"
           git config --global user.name "$USER_NAME"
           
-      - name: Get current time and Set it as env var
+      - name: Get current time and Create branch name
         env:
           TZ: 'Asia/Tokyo'
-        run: echo "CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+        run: |
+          CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')
+          BRANCH_NAME="${BRANCH_PREFIX}_${CURRENT_TIME}"
+          echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
           
       - name: Create and Checkout new branch
         run: |
-          BRANCH="${BRANCH_PREFIX}_${{ env.CURRENT_TIME }}"
-          echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
-          git checkout -b "$BRANCH"
+          git checkout -b "${{ env.BRANCH }}"
           
       - name: Set upstream repo
         run: git remote add upstream ${UPSTREAM}
