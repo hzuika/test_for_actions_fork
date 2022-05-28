@@ -34,7 +34,8 @@ jobs:
       # upstreamをmergeするが，コンフリクト(エラー)が出ても続ける．
       - continue-on-error: true
         run: |
-          git merge --allow-unrelated-histories upstream/main
+          #git merge --allow-unrelated-histories upstream/main
+          git merge upstream/main
       - run: |
           git commit -am "Merge from upstream"
       - run: |
