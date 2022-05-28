@@ -35,11 +35,19 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
         run: |
-          echo "CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+          echo "CURRENT_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
           CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')
           
       - name: Create branch name as env var
         run: |
+          T="${{ env.CURRENT_TIME }}"
+          YEAR="${T:0:4}"
+          MONTH="${T:4:2}"
+          DAY="${T:6:2}"
+          HOUR="${T:8:2}"
+          MIN="${T:10:2}"
+          SEC="${T:12:2}"
+          BRANCH_SUFFIX="${YEAR}_${MONTH}_${DAY}_${HOUR}_${MIN}_${SEC}"
           BRANCH_NAME="${BRANCH_PREFIX}${{ env.CURRENT_TIME }}"
           echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
           
@@ -83,4 +91,13 @@ jobs:
       - name: Create Pull Request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$REPO" --title "Auto merge (${{ env.CURRENT_TIME }})" --body "${{ env.MERGE_OUTPUT }}"
+        run: |
+          T="${{ env.CURRENT_TIME }}"
+          YEAR="${T:0:4}"
+          MONTH="${T:4:2}"
+          DAY="${T:6:2}"
+          HOUR="${T:8:2}"
+          MIN="${T:10:2}"
+          SEC="${T:12:2}"
+          TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
+          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$REPO" --title "Auto merge (${TIME})" --body "${{ env.MERGE_OUTPUT }}"
