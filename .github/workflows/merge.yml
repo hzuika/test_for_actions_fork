@@ -124,8 +124,8 @@ jobs:
           else
             echo "${{ steps.merge.outputs.STDERR }}" > ../merge_output.txt
           fi
-          
-          echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
+          echo "MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}" >> $GITHUB_ENV
+          #echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
 
                     
       # テキストファイルの内容を環境変数に格納する．
