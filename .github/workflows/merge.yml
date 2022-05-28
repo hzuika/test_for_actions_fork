@@ -47,7 +47,7 @@ jobs:
           MIN="${T:10:2}"
           SEC="${T:12:2}"
           BRANCH_SUFFIX="${YEAR}_${MONTH}_${DAY}_${HOUR}_${MIN}_${SEC}"
-          BRANCH_NAME="${BRANCH_PREFIX}${{ env.CURRENT_TIME }}"
+          BRANCH_NAME="${BRANCH_PREFIX}${BRANCH_SUFFIX}"
           echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
           
       - name: Create and Checkout new branch
