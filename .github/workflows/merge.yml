@@ -14,7 +14,7 @@ env:
   USER_NAME: hzuika
   
 jobs:
-  build:
+  auto_merge:
 
     runs-on: ubuntu-latest
     
@@ -89,6 +89,13 @@ jobs:
       # テキストファイルの内容を環境変数に格納する．
       - name: Set merge output to env
         run: echo 'MERGE_OUTPUT=$(cat merge_output.txt)' >> $GITHUB_ENV
+      
+      # マージ出力が Already up to date. であれば強制終了する．
+      - name: Check Already up to date.
+        if: ${{ env.MERGE_OUTPUT  == 'Already up to date.'}}
+        run: |
+          echo "No need to merge."
+          exit 1
       
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge
