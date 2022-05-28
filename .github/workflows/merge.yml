@@ -78,6 +78,9 @@ jobs:
         run: git fetch upstream --unshallow
       
       # upstreamをマージする．
+      
+      # github-scriptsを使って，終了コード，標準出力，標準エラー出力を変数に格納する．
+      
       # コンフリクトマーカーが生成されてエラーになるが，
       # continue-on-error: true をつけることで，
       # コンフリクト(エラー)が出てもワークフローを終了させずに次のrunへ進む．
@@ -110,6 +113,10 @@ jobs:
           echo "stderr:"
           echo "${{ steps.merge.outputs.STDERR }}"
 
+      # 標準出力か，標準エラー出力のどちらかを環境変数に格納する．
+      # 一度テキストファイルに格納してから，環境変数に格納する．
+      # テキストファイルはGitの対象にならないように親ディテクトリに保存する．
+      # echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV だとエラーになる．
       - name: Set merge output upstream repo
         run: |
           if [ "${{ steps.merge.outputs.EXIT_CODE }}" == '0' ]; then
@@ -117,12 +124,15 @@ jobs:
           else
             echo "${{ steps.merge.outputs.STDERR }}" > ../merge_output.txt
           fi
+          
+          echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
+
                     
       # テキストファイルの内容を環境変数に格納する．
-      - name: Set merge output to env
-        run: |
-          #echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
-          echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV
+      # echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV だとエラーになる．
+#       - name: Set merge output to env
+#         run: |
+#           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
       - name: Show merge output
@@ -136,7 +146,7 @@ jobs:
       
       - name: Check Already up to date.
         run: |
-          if [ "${{ steps.merge.outputs.STDOUT }}" = "Already up to date." ]; then
+          if [ "${{ env.MERGE_OUTPUT }}" = "Already up to date." ]; then
             echo "This repository is up to date."
             exit 1
           else
@@ -152,7 +162,7 @@ jobs:
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge with conflict marker
         if: ${{ steps.merge.outputs.EXIT_CODE != 0 }}
-        run: git commit -am "Merge from upstream"
+        run: git commit -am "Merge upstream with conflict marker"
       
       # リモートリポジトリにプッシュする．          
       - name: Push this branch to origin
@@ -167,5 +177,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          PR_BODY="${{ env.MERGE_OUTPUT }}"
           TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
-          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "Auto merge (${TIME})" --body "${{ env.MERGE_OUTPUT }}"
+          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "Auto merge upstream (${TIME})" --body "${PR_BODY}"
