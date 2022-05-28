@@ -32,6 +32,7 @@ jobs:
       - run: |
           git fetch upstream
       # upstreamをmergeするが，コンフリクト(エラー)が出ても続ける．
+      # fatal: refusing to merge unrelated histories を解消するための `--allow-unrelated-histories`
       - continue-on-error: true
         run: |
           git merge --allow-unrelated-histories upstream/main
