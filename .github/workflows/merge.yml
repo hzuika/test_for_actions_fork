@@ -30,7 +30,7 @@ jobs:
       - run: |
           git remote add upstream ${UPSTREAM}
       - run: |
-          git fetch upstream
+          git fetch upstream --unshallow
       # upstreamをmergeするが，コンフリクト(エラー)が出ても続ける．
       - continue-on-error: true
         run: |
