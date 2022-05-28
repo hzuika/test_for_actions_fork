@@ -31,9 +31,11 @@ jobs:
           git remote add upstream ${UPSTREAM}
       - run: |
           git fetch upstream
-      - run: |
+      - continue-on-error: true
+        run: |
           git merge --allow-unrelated-histories upstream/main
-          git commit -am "confict marker"
+          git status
+          #git commit -am "confict marker"
       - run: |
           git show
           #git commit -am "conflict marker"
