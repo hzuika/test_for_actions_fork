@@ -36,7 +36,6 @@ jobs:
           TZ: 'Asia/Tokyo'
         run: |
           echo "CURRENT_TIME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-          CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')
           
       - name: Create branch name as env var
         run: |
