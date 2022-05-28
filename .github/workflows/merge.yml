@@ -10,6 +10,7 @@ on:
 env:
   BRANCH: auto_merge
   UPSTREAM: https://github.com/snowatfeet/test_for_actions.git
+  REPO: hzuika/test_for_actions_fork
   USER_EMAIL: 39191601+hzuika@users.noreply.github.com
   USER_NAME: hzuika
   
@@ -40,6 +41,6 @@ jobs:
           git push origin "$BRANCH"
       # upstream を設定したため，プルリクエストの対象を`--repo`で明示的に指定する．
       - run: |
-          gh pr create --head "$BRANCH" --base "main" --repo "hzuika/test_for_actions_fork" -t "Auto merge" -b ""
+          gh pr create --head "$BRANCH" --base "main" --repo "$REPO" -t "Auto merge" -b ""
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
