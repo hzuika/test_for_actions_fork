@@ -101,7 +101,8 @@ jobs:
           echo ${{ env.MERGE_OUTPUT  == 'Already up to date.\n'}}
           echo ${{ env.MERGE_OUTPUT  == 'Already up to date.\\n'}}
           echo ${{ env.MERGE_OUTPUT  == 'Already up to date.\r\n'}}
-          echo ${{ "${{env.MERGE_OUTPUT}}"  == 'Already up to date.'}}
+          echo ${{ env.MERGE_OUTPUT  == 'Already up to date.'}}
+          echo ${{ $(cat merge_output.txt) == 'Already up to date.'}}
           echo ${{ env.MERGE_OUTPUT  == 'Already up to date. '}}
           echo [["${{ env.MERGE_OUTPUT }}"  == 'Already up to date.']]
           echo [["${{ env.MERGE_OUTPUT }}"  == 'Already up to date.\n']]
