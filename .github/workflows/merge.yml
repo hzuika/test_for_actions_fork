@@ -20,9 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          git checkout -b "$BRANCH"
-          git fetch upstream
-          git merge upstream/main
-          git commit -am "conflict marker"
-          git push origin "$BRANCH"
-          gh pr create -B "main" -t "Auto merge" -b ""
+          git status
+          git branch
+          git remote -v
+          #git checkout -b "$BRANCH"
+          #git fetch upstream
+          #git merge upstream/main
+          #git commit -am "conflict marker"
+          #git push origin "$BRANCH"
+          #gh pr create -B "main" -t "Auto merge" -b ""
