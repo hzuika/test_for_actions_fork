@@ -20,7 +20,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: |
           git config --global user.email "$USER_EMAIL"
           git config --global user.name "$USER_NAME"
@@ -36,7 +36,8 @@ jobs:
       - run: |
           git commit -am "confict marker"
       - run: |
-          git push origin "$BRANCH"
+          #git push origin "$BRANCH"
+      - uses: actions/checkout@v3
       - run: |
           gh pr create --head "$BRANCH" --base "main" -t "Auto merge" -b ""
         env:
