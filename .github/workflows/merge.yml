@@ -36,13 +36,14 @@ jobs:
       - name: Create and Checkout new branch
         run: |
           git checkout -b "$BRANCH"
+          
       - name: Set upstream repo
-      - run: |
+        run: |
           git remote add upstream ${UPSTREAM}
           
       # デフォルトでfetch-depthが1(shallow clone)なので，mergeするときに，fatal: refusing to merge unrelated historiesが出るのを避ける
       - name: Fetch upstream repo
-      - run: |
+        run: |
           git fetch upstream --unshallow
           
       # upstreamをmergeするが，コンフリクト(エラー)が出てもワークフローを終了させない．
