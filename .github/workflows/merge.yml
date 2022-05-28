@@ -143,12 +143,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           A: ${{ env.MERGE_OUTPUT }}
         run: |
-          echo ${{ startsWith(env.MERGE_OUTPUT, 'b') }}
-          echo ${{ startsWith(env.MERGE_OUTPUT, 'c') }}
-          echo ${{ startsWith(env.MERGE_OUTPUT, 'd') }}
-          echo ${{ startsWith(env.MERGE_OUTPUT, 'e') }}
-          echo ${{ startsWith(env.MERGE_OUTPUT, 'f') }}
-          echo ${{ contains(env.MERGE_OUTPUT, 'cat') }}
+          echo ${{ contains(env.MERGE_OUTPUT, 'cat ../merge_output.txt') }}
+          
+          echo ${{ contains(steps.merge.outputs.STDOUT, 'result') }}
+          
+          echo ${{ contains(steps.merge.outputs.STDOUT, 'Already') }}
           
           if [[ "${{ env.MERGE_OUTPUT }}" == "Already up to date." ]]; then
             echo "This repository is up to date."
