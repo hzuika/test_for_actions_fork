@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
+          git config --global user.email "$USER_EMAIL"
+          git config --global user.name "$USER_NAME"
+      - run: |
           git checkout -b "$BRANCH"
       - run: |
           git remote add upstream ${UPSTREAM}
