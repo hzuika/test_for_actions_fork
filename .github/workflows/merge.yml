@@ -97,6 +97,8 @@ jobs:
           echo "No need to merge."
           exit 1
       
+      - run: git status
+      
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge
         run: git commit -am "Merge from upstream"
