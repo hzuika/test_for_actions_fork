@@ -9,7 +9,6 @@ on:
   workflow_dispatch:
   
 env:
-  # 日付も入れたい
   BRANCH_PREFIX: auto_merge
   UPSTREAM: https://github.com/snowatfeet/test_for_actions.git
   REPO: hzuika/test_for_actions_fork
@@ -38,7 +37,9 @@ jobs:
         run: echo "CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
           
       - name: Create and Checkout new branch
-        run: git checkout -b "${BRANCH_PREFIX}_${{ env.CURRENT_TIME }}"
+        run: |
+          echo "BRANCH=${BRANCH_PREFIX}_${{ env.CURRENT_TIME }}" >> $GITHUB_ENV
+          git checkout -b "${{ env.BRANCH }}"
           
       - name: Set upstream repo
         run: git remote add upstream ${UPSTREAM}
@@ -77,5 +78,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create --head "$BRANCH" --base "main" --repo "$REPO" --title "Auto merge" --body "${{ env.MERGE_OUTPUT }}"
+          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$REPO" --title "Auto merge" --body "${{ env.MERGE_OUTPUT }}"
           #gh pr create --head "$BRANCH" --base "main" --repo "$REPO" --title "Auto merge" --body "${{ steps.merge.outputs.MERGE_OUTPUT }}"
