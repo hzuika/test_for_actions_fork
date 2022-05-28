@@ -16,6 +16,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/checkout@v2
       - run: gh pr create --head "auto_merge" --base "main" -t "Auto merge" -b ""
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
