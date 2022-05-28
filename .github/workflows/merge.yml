@@ -113,9 +113,9 @@ jobs:
       - name: Set merge output upstream repo
         run: |
           if [ "${{ steps.merge.outputs.EXIT_CODE }}" == '0' ]; then
-            ${{ steps.merge.outputs.STDOUT }} > ../merge_output.txt
+            echo "${{ steps.merge.outputs.STDOUT }}" > ../merge_output.txt
           else
-            ${{ steps.merge.outputs.STDERR }} > ../merge_output.txt
+            echo "${{ steps.merge.outputs.STDERR }}" > ../merge_output.txt
           fi
                     
       # テキストファイルの内容を環境変数に格納する．
