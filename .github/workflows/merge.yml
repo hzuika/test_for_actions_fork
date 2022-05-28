@@ -143,32 +143,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           A: ${{ env.MERGE_OUTPUT }}
         run: |
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'a') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'b') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'c') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'd') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'e') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'f') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'g') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'h') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'i') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'j') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'k') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'l') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'm') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'n') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'o') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'p') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'q') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'r') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 's') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 't') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'u') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'v') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'w') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'x') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'y') }}
-          echo ${{ endsWith(steps.merge.outputs.STDOUT, 'z') }}
+          echo ${{ endsWith(steps.merge.outputs.STDOUT, '\n') }}
+          echo ${{ endsWith(steps.merge.outputs.STDOUT, '\0') }}
+
           
           if [[ "${{ env.MERGE_OUTPUT }}" == "Already up to date." ]]; then
             echo "This repository is up to date."
