@@ -10,12 +10,11 @@ on:
   
 env:
   # 日付も入れたい
-  BRANCH: auto_merge
+  BRANCH_PREFIX: auto_merge_
   UPSTREAM: https://github.com/snowatfeet/test_for_actions.git
   REPO: hzuika/test_for_actions_fork
   USER_EMAIL: 39191601+hzuika@users.noreply.github.com
   USER_NAME: hzuika
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
 jobs:
   build:
@@ -33,8 +32,13 @@ jobs:
           git config --global user.email "$USER_EMAIL"
           git config --global user.name "$USER_NAME"
           
+      - name: Get current time and Set it as env var
+        env:
+          TZ: 'Asia/Tokyo'
+        run: echo "CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
+          
       - name: Create and Checkout new branch
-        run: git checkout -b "$BRANCH"
+        run: git checkout -b "$BRANCH_PREFIX${{ env.CURRENT_TIME }}"
           
       - name: Set upstream repo
         run: git remote add upstream ${UPSTREAM}
@@ -70,6 +74,8 @@ jobs:
       # gh コマンドでプルリクエストを作成するためには，GH_TOKENが必要
       # マージしたときの出力をプルリクエストの本文に使う
       - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create --head "$BRANCH" --base "main" --repo "$REPO" --title "Auto merge" --body "${{ env.MERGE_OUTPUT }}"
           #gh pr create --head "$BRANCH" --base "main" --repo "$REPO" --title "Auto merge" --body "${{ steps.merge.outputs.MERGE_OUTPUT }}"
