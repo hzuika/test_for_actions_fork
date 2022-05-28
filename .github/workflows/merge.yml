@@ -28,6 +28,8 @@ jobs:
           git fetch upstream
       - run: |
           git merge --no-edit --allow-unrelated-histories origin/main
+      - run: |
+          git show
           #git commit -am "conflict marker"
           #git push origin "$BRANCH"
           #gh pr create -B "main" -t "Auto merge" -b ""
