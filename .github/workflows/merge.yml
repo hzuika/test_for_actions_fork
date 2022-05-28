@@ -35,7 +35,8 @@ jobs:
       # fatal: refusing to merge unrelated histories を解消するための `--allow-unrelated-histories`
       - continue-on-error: true
         run: |
-          git merge --allow-unrelated-histories upstream/main
+          #git merge --allow-unrelated-histories upstream/main
+          git merge upstream/main
       - run: |
           git commit -am "Merge from upstream"
       - run: |
