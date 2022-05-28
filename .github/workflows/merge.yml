@@ -82,7 +82,6 @@ jobs:
         continue-on-error: true
         run: |
           git merge upstream/main >> merge_output.txt
-          echo $?
       
       # マージ出力結果を表示する．
       - name: Show merge output
@@ -91,6 +90,8 @@ jobs:
       # テキストファイルの内容を環境変数に格納する．
       - name: Set merge output to env
         run: echo 'MERGE_OUTPUT=$(cat merge_output.txt)' >> $GITHUB_ENV
+        
+      - run: echo ${{ env.MERGE_OUTPUT }}
       
       # マージ出力が Already up to date. であれば強制終了する．
       - name: Check Already up to date.
