@@ -1,6 +1,6 @@
 # Upstreamブランチからコンフリクトマーカーをつけたままマージしてプルリクエストを作成
 
-name: Merge upstream, Pull request
+name: Merge upstream, Create pull request
 
 on:
   # Actions タブから手動でこのワークフローを実行することを許可する．
@@ -121,6 +121,8 @@ jobs:
       
       - name: Git status
         run: git status
+        
+      - run: git show
       
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge
