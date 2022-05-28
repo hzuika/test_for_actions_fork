@@ -90,15 +90,21 @@ jobs:
       # テキストファイルの内容を環境変数に格納する．
       - name: Set merge output to env
         run: echo 'MERGE_OUTPUT=$(cat merge_output.txt)' >> $GITHUB_ENV
-        
-      - name: Check MERGE_OUTPUT
-        run: echo ${{ env.MERGE_OUTPUT }}
       
       # マージ出力が Already up to date. であれば強制終了する．
+      
+      # これらはなぜか false だった．
+      # echo ${{ env.MERGE_OUTPUT  == 'Already up to date.'}}
+      # echo ${{ contains(env.MERGE_OUTPUT, 'Already up to date.') }}
+      
       - name: Check Already up to date.
         run: |
-          #echo ${{ env.MERGE_OUTPUT  == 'Already up to date.'}}
-          #echo ${{ contains(env.MERGE_OUTPUT, 'Already up to date.') }}
+          if ${{ (env.MERGE_OUTPUT == "Already up to date.")}} == 'true'; then
+            echo "Branch not found"
+            # do our things
+          else
+            echo "Branch found"
+          fi
           if [ "${{ env.MERGE_OUTPUT }}" = "Already up to date." ]; then
             echo "No need to merge."
             exit 1
