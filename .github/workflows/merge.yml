@@ -102,10 +102,11 @@ jobs:
             core.setOutput('STDERR', result.stderr)
         id: merge
       
-      - run: |
-          echo ${{ steps.merge.outputs.STDOUT }}
-          echo ${{ steps.merge.outputs.STDERR }}
-          echo ${{ steps.merge.outputs.EXIT_CODE }}
+      - name: Show merge output
+        run: |
+          echo "Exit code: ${{ steps.merge.outputs.EXIT_CODE }}"
+          echo "${{ steps.merge.outputs.STDOUT }}"
+          echo "${{ steps.merge.outputs.STDERR }}"
 
 #       - name: Merge upstream repo
 #         id: merge
