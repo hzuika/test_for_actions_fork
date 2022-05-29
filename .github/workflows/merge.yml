@@ -23,7 +23,6 @@ jobs:
       # checkoutしないと，ワークフロー時の環境にこのリポジトリが存在しないことになる．      
       - uses: actions/checkout@v3
       
-      - run: echo "$GITHUB_REPOSITORY"
       - run: ls
       
       - run: git status
@@ -145,4 +144,4 @@ jobs:
           PR_BODY="${{ env.MERGE_OUTPUT }}"
           TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
           PR_TITLE="Auto merge upstream (${TIME})"
-          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "${PR_TITLE}" --body "${PR_BODY}"
+          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$GITHUB_REPOSITORY" --title "${PR_TITLE}" --body "${PR_BODY}"
