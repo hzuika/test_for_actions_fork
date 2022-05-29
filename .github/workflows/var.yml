@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   
 env:
-  BRANCH_PREFIX: auto_merge_
+  P_ENV: auto_merge_
   
 jobs:
   auto_merge:
@@ -17,8 +17,9 @@ jobs:
     steps:
     
       - run: |
-         echo "$
-    
+         echo $P_ENV
+         echo "$P_ENV"
+         
       - run: |
          echo "A_ENV=Hello" >> $GITHUB_ENV
          echo "$A_ENV"
