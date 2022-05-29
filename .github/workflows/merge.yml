@@ -157,12 +157,13 @@ jobs:
             
           fi
           
+          echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
+          
+      - run: |
           echo ${{ env.COMMIT_WITH_COMFLICTS }}
-
           
           echo ${{ env.COMMIT_WITH_COMFLICTS == 'true' }}
-          
-          echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
+          echo ${{ env.COMMIT_WITH_COMFLICTS == 'false' }}
       
       # マージ出力結果を表示する．
       - name: Show merge output
