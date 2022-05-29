@@ -164,6 +164,8 @@ jobs:
           
           echo ${{ env.COMMIT_WITH_COMFLICTS == 'true' }}
           echo ${{ env.COMMIT_WITH_COMFLICTS == 'false' }}
+          echo ${{ env.COMMIT_WITH_COMFLICTS == true }}
+          echo ${{ env.COMMIT_WITH_COMFLICTS == false }}
       
       # マージ出力結果を表示する．
       - name: Show merge output
