@@ -28,8 +28,10 @@ jobs:
       
       - name: "[DEBUG] Check Repo"
         run: |
-          echo $(ls -al)
-          echo $(git status)
+          echo "Repo"
+          ls -al
+          echo "Git Status"
+          git status
             
       # (マージ)コミットするときに必要なgit configを設定する．      
       - name: Set git config for merge commit
@@ -112,27 +114,21 @@ jobs:
       - name: "[DEBUG] Check git ls-files"
         run: 
           echo "Unmerged files"
-          
           echo "$(git ls-files -u)"
           
           echo "Cut 1"
-          
           echo "$(git ls-files -u  | cut -f 1)"
           
           echo "Cut 2"
-          
           echo "$(git ls-files -u  | cut -f 2)"
          
           echo "Sort"
-
           echo "$(git ls-files -u  | cut -f 2 | sort)"
           
-          echo "Soft unique"
-
+          echo "Sort unique"
           echo "$(git ls-files -u  | cut -f 2 | sort -u)"
           
-          echo "Word Count"
-          
+          echo "Word Count"  
           echo "$(git ls-files --unmerged | cut --fields=2 | sort --unique | wc --chars)"
       
       # マージしたときにコンフリクトのあるファイルはコミットされない．
@@ -162,16 +158,9 @@ jobs:
           echo "$(cat ../merge_output.txt | wc --lines)"
           
       # コンフリクト数をチェックする．
-      - name: Check for conflicts
-        run: |
-          NUM='$(cat ../merge_output.txt | wc --lines)'
-          echo "$NUM"
-          NUM=`cat ../merge_output.txt | wc --lines`
-          echo "$NUM conflicts."
-          
+      - name: Count conflicts as env var
+        run: |       
           echo "CONFLICTS_NUM=$(cat ../merge_output.txt | wc --lines)" >> $GITHUB_ENV
-          #echo "CONFLICTS_NUM='${NUM}'" >> $GITHUB_ENV
-          #echo "CONFLICTS_NUM=${NUM}" >> $GITHUB_ENV
       
       - name: "[DEBUG] Show conflicts num"
         run: |    
