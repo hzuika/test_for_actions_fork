@@ -61,8 +61,7 @@ jobs:
       - name: Create branch name as env var
         run: |
           BRANCH_SUFFIX="${YEAR}_${MONTH}_${DAY}_${HOUR}_${MIN}_${SEC}"
-          BRANCH_NAME="${BRANCH_PREFIX}${BRANCH_SUFFIX}"
-          echo "BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
+          echo "BRANCH=${BRANCH_PREFIX}${BRANCH_SUFFIX}" >> $GITHUB_ENV
           
       # 先ほどの環境変数を使用してブランチを作成してチェックアウトする．
       - name: Create and Checkout new branch
