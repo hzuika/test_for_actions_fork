@@ -132,7 +132,7 @@ jobs:
           git ls-files -u  | cut -f 2 | sort -u > ../merge_output.txt
       
       - run: |
-          echo $(wc ../merge_output.txt)
+          echo $(wc --bytes ../merge_output.txt)
       
       - run: |
           URL_PREFIX=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${BRANCH}/
