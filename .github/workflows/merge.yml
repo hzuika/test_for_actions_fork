@@ -99,30 +99,40 @@ jobs:
       - name: Show merge output
         run: |
           echo "Exit code: ${{ steps.merge.outputs.EXIT_CODE }}"
+          
           echo "stdout:"
+          
           echo "${{ steps.merge.outputs.STDOUT }}"
+          
           echo "stderr:"
+          
           echo "${{ steps.merge.outputs.STDERR }}"
 
       - name: Check git ls-files
         run: 
           echo "Unmerged files"
-          echo $(git ls-files -u)
+          
+          echo "$(git ls-files -u)"
           
           echo "Cut 1"
-          echo $(git ls-files -u  | cut -f 1)
+          
+          echo "$(git ls-files -u  | cut -f 1)"
           
           echo "Cut 2"
-          echo $(git ls-files -u  | cut -f 2)
+          
+          echo "$(git ls-files -u  | cut -f 2)"
          
           echo "Sort"
-          echo $(git ls-files -u  | cut -f 2 | sort)
+
+          echo "$(git ls-files -u  | cut -f 2 | sort)"
           
           echo "Soft unique"
-          echo $(git ls-files -u  | cut -f 2 | sort -u)
+
+          echo "$(git ls-files -u  | cut -f 2 | sort -u)"
           
           echo "Word Count"
-          echo $(git ls-files --unmerged | cut --fields=2 | sort --unique | wc --chars)
+          
+          echo "$(git ls-files --unmerged | cut --fields=2 | sort --unique | wc --chars)"
       
       # マージしたときにコンフリクトのあるファイルはコミットされない．
       # git ls-files -u でマージされていないコミットとファイルが表示される．
