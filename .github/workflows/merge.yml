@@ -146,7 +146,8 @@ jobs:
           
           echo "${{ env.CONFLICTS_NUM }}"
           echo "$CONFLICTS_NUM Conflicts"
-          
+          echo "${{ format('{0} Conflicts', env.CONFLICTS_NUM) }}"
+          echo "${{ toJSON(env.CONFLICTS_NUM) }}"
           echo "${{ env.CONFLICTS_NUM == 0 }}"
           
       # コンフリクトファイル一覧にURLを付けたり，タイトルを付けたりして，プルリクエストの本文を作る．
