@@ -111,6 +111,8 @@ jobs:
       - run: git ls-files -u  | cut -f 2
       
       - run: git ls-files -u  | cut -f 2 | sort
+      
+      - run: git ls-files --unmerged | cut --fields=2 | sort -- unique | wc --chars
 
       # マージしたときにコンフリクトのあるファイルはコミットされない
       # コミットされていないファイル一覧から，ファイル名をカットして，重複を削除して並び替え
