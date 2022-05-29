@@ -139,7 +139,7 @@ jobs:
       # gh コマンドでプルリクエストを作成するためには，GH_TOKENが必要になる．
       # 環境変数に格納したマージ出力結果をプルリクエストの本文に使う．      
       - name: Push and Create pull request
-        if: startsWith(steps.merge.outputs.STDOUT, 'Already up to date.')
+        if: ${{ startsWith(steps.merge.outputs.STDOUT, 'Already up to date.') == true }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |          
