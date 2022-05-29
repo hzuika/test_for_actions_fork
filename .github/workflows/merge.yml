@@ -79,6 +79,12 @@ jobs:
       # --unshallow オプションをつけてフェッチする．      
       - name: Fetch upstream repo
         run: git fetch upstream --unshallow
+        
+      - run: |
+          git diff upstream/main
+          
+      - run: |
+          git status
       
       # upstreamをマージする．
       # github-scriptsを使って，終了コード，標準出力，標準エラー出力を変数に格納する．
