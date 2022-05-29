@@ -108,12 +108,8 @@ jobs:
       # シングルクォーテーションをダブルクォーテーションに変えてもエラー
       - name: Set merge output as env var
         run: |
-          if [ "${{ steps.merge.outputs.EXIT_CODE }}" == '0' ]; then
-            echo "${{ steps.merge.outputs.STDOUT }}" > ../merge_output.txt
-          else
-            echo "${{ steps.merge.outputs.STDERR }}" > ../merge_output.txt
-          fi
-          
+          echo "${{ steps.merge.outputs.STDOUT }}" > ../merge_output.txt
+          echo "${{ steps.merge.outputs.STDERR }}" >> ../merge_output.txt
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
