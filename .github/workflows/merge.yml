@@ -160,6 +160,7 @@ jobs:
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
           
       - run: |
+          echo "${{ env.COMMIT_WITH_COMFLICTS }}"
           echo ${{ env.COMMIT_WITH_COMFLICTS == true }}
           echo ${{ env.COMMIT_WITH_COMFLICTS == false }}
       
