@@ -22,7 +22,7 @@ jobs:
       # checkoutしないと，ワークフロー時の環境にこのリポジトリが存在しないことになる．      
       - uses: actions/checkout@v3
       
-      - run: echo ${{ github }}
+      - run: echo $GITHUB_CONTEXT
       
       - run: echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/"
       
