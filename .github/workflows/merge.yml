@@ -142,6 +142,9 @@ jobs:
       # コンフリクト数をチェックする．
       - name: Check for conflicts
         run: |
+          NUM='$(cat ../merge_output.txt | wc --lines)'
+          echo "$NUM"
+          
           echo "CONFLICTS_NUM='$(cat ../merge_output.txt | wc --lines)'" >> $GITHUB_ENV
           
           echo "${{ env.CONFLICTS_NUM }}"
