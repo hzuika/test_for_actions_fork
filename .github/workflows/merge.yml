@@ -12,7 +12,6 @@ env:
   USER_EMAIL: 39191601+hzuika@users.noreply.github.com
   USER_NAME: hzuika
   MERGE_COMMAND: git merge upstream/main
-  ORIGIN_BASE_REPO: main
   
 jobs:
   auto_merge:
@@ -235,4 +234,4 @@ jobs:
           PR_BODY="${{ env.MERGE_OUTPUT }}"
           TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
           PR_TITLE="Auto merge upstream (${TIME})"
-          gh pr create --head ${{ env.BRANCH }} --base $ORIGIN_BASE_REPO --repo "$GITHUB_REPOSITORY" --title "${PR_TITLE}" --body "${PR_BODY}"
+          gh pr create --head ${{ env.BRANCH }} --base $GITHUB_REF_NAME --repo "$GITHUB_REPOSITORY" --title "${PR_TITLE}" --body "${PR_BODY}"
