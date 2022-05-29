@@ -50,8 +50,10 @@ jobs:
       - env:
           D_LOCAL: $A_ENV
           E_LOCAL: ${A_ENV}
+          # 式として評価
           F_LOCAL: ${{ env.A_ENV }}
         run: |
           echo $D_LOCAL
+          echo ${D_LOCAL}
           echo $E_LOCAL
-          echo $F_LOCAL
+          echo $F_LOCAL # Hello
