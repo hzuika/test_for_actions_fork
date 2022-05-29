@@ -123,7 +123,8 @@ jobs:
           echo "${{ steps.merge.outputs.STDOUT }}" > ../merge_output.txt
           echo "${{ steps.merge.outputs.STDERR }}" >> ../merge_output.txt
           
-          git ls-files -u  | cut -f 2 | sort -u > ../merge_output.txt
+          echo "Conflict files" > ../merge_output.txt
+          git ls-files -u  | cut -f 2 | sort -u >> ../merge_output.txt
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
