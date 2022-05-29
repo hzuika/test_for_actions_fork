@@ -1,6 +1,6 @@
 # Upstreamブランチからコンフリクトマーカーをつけたままマージしてプルリクエストを作成
 
-name: Merge upstream, Create pull request
+name: Variable Check
 
 on:
   # Actions タブから手動でこのワークフローを実行することを許可する．
