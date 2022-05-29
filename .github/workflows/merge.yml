@@ -151,10 +151,13 @@ jobs:
           cat ../merge_output.txt
       
       - run: |
-          echo $(cat ../merge_output.txt | wc --bytes)
+          echo "Byte count"
+      
+          echo "$(cat ../merge_output.txt | wc --bytes)"
           
-      - run: |
-          echo $(cat ../merge_output.txt | wc --lines)
+          echo "Line count"
+          
+          echo "$(cat ../merge_output.txt | wc --lines)"
           
       # コンフリクト数をチェックする．
       - name: Check for conflicts
@@ -164,9 +167,9 @@ jobs:
           NUM=`cat ../merge_output.txt | wc --lines`
           echo "$NUM conflicts."
           
-          #echo "CONFLICTS_NUM='$(cat ../merge_output.txt | wc --lines)'" >> $GITHUB_ENV
+          echo "CONFLICTS_NUM=$(cat ../merge_output.txt | wc --lines)" >> $GITHUB_ENV
           #echo "CONFLICTS_NUM='${NUM}'" >> $GITHUB_ENV
-          echo "CONFLICTS_NUM=${NUM}" >> $GITHUB_ENV
+          #echo "CONFLICTS_NUM=${NUM}" >> $GITHUB_ENV
       
       - run: |    
           echo "${{ env.CONFLICTS_NUM }}"
