@@ -139,17 +139,10 @@ jobs:
       # gh コマンドでプルリクエストを作成するためには，GH_TOKENが必要になる．
       # 環境変数に格納したマージ出力結果をプルリクエストの本文に使う．      
       - name: Push and Create pull request
-        #if: ${{ env.MERGE_OUTPUT != 'Already up to date.' }}
-        #if: startsWith(env.MERGE_OUTPUT, 'Already up to date.')
+        if: startsWith(steps.merge.outputs.STDOUT, 'Already up to date.')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          A: ${{ env.MERGE_OUTPUT }}
-        run: |
-        
-          echo ${{ steps.merge.outputs.STDOUT }}
-          echo ${{ contains(steps.merge.outputs.STDOUT, '\\n') }}
-          echo ${{ contains(steps.merge.outputs.STDOUT, '%0A') }}
-          
+        run: |          
           if [[ "${{ env.MERGE_OUTPUT }}" == "Already up to date." ]]; then
             echo "This repository is up to date."
             exit 0
