@@ -132,7 +132,7 @@ jobs:
       
       # リモートリポジトリにプッシュして，プルリクエストを作成する．
       
-      # マージ出力が Already up to date. であれば終了する．
+      # マージ出力が Already up to date. であれば実行しない．
 
       # upstream を設定すると，プルリクエストのマージ先がデフォルトでupstreamになるため，
       # --repo オプションで明示的にリポジトリを指定する．
@@ -143,18 +143,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |          
-          if [[ "${{ env.MERGE_OUTPUT }}" == "Already up to date." ]]; then
-            echo "This repository is up to date."
-            exit 0
-          else
-            echo "The merge was done."
-            
-            git push origin "$BRANCH"
-            
-            PR_BODY="${{ env.MERGE_OUTPUT }}"
-            TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
-            PR_TITLE="Auto merge upstream (${TIME})"
-            gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "${PR_TITLE}" --body "${PR_BODY}"
-            
-            exit 0
-          fi
+          git push origin "$BRANCH"
+
+          PR_BODY="${{ env.MERGE_OUTPUT }}"
+          TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
+          PR_TITLE="Auto merge upstream (${TIME})"
+          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$ORIGIN_REPO" --title "${PR_TITLE}" --body "${PR_BODY}"
