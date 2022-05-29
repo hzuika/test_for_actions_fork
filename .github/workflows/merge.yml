@@ -22,9 +22,9 @@ jobs:
       # checkoutしないと，ワークフロー時の環境にこのリポジトリが存在しないことになる．      
       - uses: actions/checkout@v3
       
-      - run: echo $GITHUB_CONTEXT
+#       - run: echo $GITHUB_CONTEXT
       
-      - run: echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/"
+#       - run: echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/"
       
       - run: ls
       
@@ -114,20 +114,20 @@ jobs:
       
       - run: git ls-files --unmerged | cut --fields=2 | sort --unique | wc --chars
 
-      # マージしたときにコンフリクトのあるファイルはコミットされない
-      # コミットされていないファイル一覧から，ファイル名をカットして，重複を削除して並び替え
+      # マージしたときにコンフリクトのあるファイルはコミットされない．
+      # git ls-files -u でマージされていないコミットとファイルが表示される．
+      # コミットされていないファイル一覧から，ファイル名だけ抽出して，重複を削除して並び替え．
       - name: Show conflict files
         run: git ls-files -u  | cut -f 2 | sort -u
 
-      # 終了コードによって，標準出力か，標準エラー出力のどちらかを環境変数に格納する．
+      # コンフリクトファイル一覧をテキストファイルに格納する．
       # 一度テキストファイルに格納してから，環境変数に格納する．
       # テキストファイルはGitの対象にならないように親ディテクトリに保存する．
-      # echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV だとエラーになる．
-      # シングルクォーテーションをダブルクォーテーションに変えてもエラー
       
-      # sed だと標準出力するだけ
-      # sed -i がないと上書き保存されない
-      - name: Set merge output as env var
+      # echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV だとエラーになる．
+      # シングルクォーテーションをダブルクォーテーションに変えてもエラー．
+      
+      - name: Save conflict files list in text file.
         env:
           FILENAME: ../merge_output.txt
         run: |          
@@ -135,8 +135,26 @@ jobs:
       
       - run: |
           echo $(cat ../merge_output.txt | wc --bytes)
-      
+          
       - run: |
+          echo $(cat ../merge_output.txt | wc --lines)
+          
+      # コンフリクト数をチェックする．
+      - name: Check for conflicts
+        run: |
+          echo "CONFLICTS_NUM=$(cat ../merge_output.txt | wc --lines)" >> $GITHUB_ENV
+          
+          echo "${{ env.CONFLICTS_NUM }}"
+          
+          echo "${{ env.CONFLICTS_NUM == 0 }}"
+          
+      # コンフリクトファイル一覧にURLを付けたり，タイトルを付けたりして，プルリクエストの本文を作る．
+      # コンフリクトがない場合とある場合で条件分けを行う．
+      # コンフリクトがある場合は，コミットが必要なので，環境変数に必要かどうか記録しておく．
+      # sed だと標準出力するだけになる．
+      # sed -i がないと上書き保存されない．
+      - name: Create pull request body
+        run: |
           if [[ $(cat ../merge_output.txt | wc --bytes) == 0 ]]; then
             echo "# Successfully merged" > ../merge_output.txt
             echo "COMMIT_WITH_CONFLICTS=false" >> $GITHUB_ENV
@@ -158,11 +176,6 @@ jobs:
           fi
           
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
-          
-      - run: |
-          echo "${{ env.COMMIT_WITH_COMFLICTS }}"
-          echo ${{ env.COMMIT_WITH_COMFLICTS == true }}
-          echo ${{ env.COMMIT_WITH_COMFLICTS == false }}
       
       # マージ出力結果を表示する．
       - name: Show merge output
