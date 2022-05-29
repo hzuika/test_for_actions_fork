@@ -166,7 +166,6 @@ jobs:
         run: |
           if [[ $CONFLICTS_NUM == 0 ]]; then
             echo "# Successfully merged" > ../merge_output.txt
-            echo "COMMIT_WITH_CONFLICTS=false" >> $GITHUB_ENV
           else
             URL_PREFIX=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${BRANCH}/
 
@@ -178,10 +177,7 @@ jobs:
             # - [ファイル名](URL/ファイル名) に変換
             sed --in-place "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
             # 先頭行に # Conflict files を挿入
-            sed --in-place '1i# Conflict files' ../merge_output.txt
-            
-            echo "COMMIT_WITH_CONFLICTS=true" >> $GITHUB_ENV
-            
+            sed --in-place '1i# Conflict files' ../merge_output.txt            
           fi
           
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
@@ -197,7 +193,7 @@ jobs:
       
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge with conflict marker
-        if: ${{ env.COMMIT_WITH_COMFLICTS == true }}
+        if: ${{ env.CONFLICTS_NUM != 0 }}
         run: git commit -am "Merge upstream with conflict marker"
       
       # リモートリポジトリにプッシュして，プルリクエストを作成する．
