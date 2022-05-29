@@ -160,10 +160,6 @@ jobs:
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
           
       - run: |
-          echo ${{ env.COMMIT_WITH_COMFLICTS }}
-          
-          echo ${{ env.COMMIT_WITH_COMFLICTS == 'true' }}
-          echo ${{ env.COMMIT_WITH_COMFLICTS == 'false' }}
           echo ${{ env.COMMIT_WITH_COMFLICTS == true }}
           echo ${{ env.COMMIT_WITH_COMFLICTS == false }}
       
@@ -178,7 +174,7 @@ jobs:
       
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge with conflict marker
-        if: ${{ steps.merge.outputs.EXIT_CODE != 0 }}
+        if: ${{ env.COMMIT_WITH_COMFLICTS == true }}
         run: git commit -am "Merge upstream with conflict marker"
       
       # リモートリポジトリにプッシュして，プルリクエストを作成する．
