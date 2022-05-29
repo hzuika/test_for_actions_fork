@@ -10,7 +10,7 @@ env:
   P_ENV: auto_merge_
   
 jobs:
-  auto_merge:
+  var_check:
 
     runs-on: ubuntu-latest
     
