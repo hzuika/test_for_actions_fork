@@ -144,6 +144,8 @@ jobs:
         run: |
           NUM='$(cat ../merge_output.txt | wc --lines)'
           echo "$NUM"
+          NUM=`cat ../merge_output.txt | wc --lines`
+          echo "$NUM"
           
           echo "CONFLICTS_NUM='$(cat ../merge_output.txt | wc --lines)'" >> $GITHUB_ENV
           
