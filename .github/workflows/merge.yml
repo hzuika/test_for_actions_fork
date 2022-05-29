@@ -20,6 +20,8 @@ jobs:
     
     steps:
     
+      - run: ls
+    
       # checkoutしないと，ワークフロー時の環境にこのリポジトリが存在しないことになる．      
       - uses: actions/checkout@v3
       
