@@ -35,6 +35,9 @@ jobs:
          echo "${B_ENV}"
          
       - run: |
+         echo "B_ENV"
+         
+      - run: |
          C_LOCAL=0
          echo "$C_LOCAL"
          
@@ -46,5 +49,9 @@ jobs:
 
       - env:
           D_LOCAL: $A_ENV
+          E_LOCAL: ${A_ENV}
+          F_LOCAL: ${{ env.A_ENV }}
         run: |
           echo $D_LOCAL
+          echo $E_LOCAL
+          echo $F_LOCAL
