@@ -145,10 +145,11 @@ jobs:
           NUM='$(cat ../merge_output.txt | wc --lines)'
           echo "$NUM"
           NUM=`cat ../merge_output.txt | wc --lines`
-          echo "$NUM"
+          echo "$NUM conflicts."
           
           #echo "CONFLICTS_NUM='$(cat ../merge_output.txt | wc --lines)'" >> $GITHUB_ENV
-          echo "CONFLICTS_NUM='${NUM}'" >> $GITHUB_ENV
+          #echo "CONFLICTS_NUM='${NUM}'" >> $GITHUB_ENV
+          echo "CONFLICTS_NUM=${NUM}" >> $GITHUB_ENV
           
           echo "${{ env.CONFLICTS_NUM }}"
           echo "$CONFLICTS_NUM Conflicts"
