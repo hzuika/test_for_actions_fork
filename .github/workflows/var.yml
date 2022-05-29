@@ -35,7 +35,7 @@ jobs:
          echo "${B_ENV}"
          
       - run: |
-         echo "B_ENV"
+         echo "$B_ENV"
          
       - run: |
          C_LOCAL=0
