@@ -205,7 +205,7 @@ jobs:
       
       # マージ出力結果を表示する．
       - name: "[DEBUG] Show merge output"
-        run: ${{ env.MERGE_OUTPUT }}
+        run: echo "${{ env.MERGE_OUTPUT }}"
       
       - name: "[DEBUG] Git status"
         run: |
