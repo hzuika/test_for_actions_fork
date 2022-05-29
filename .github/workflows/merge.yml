@@ -139,7 +139,7 @@ jobs:
       - run: |
           if [[ $(cat ../merge_output.txt | wc --bytes) == 0 ]]; then
             echo "# Successfully merged" > ../merge_output.txt
-            echo 'COMMIT_WITH_CONFLICTS=false' >> $GITHUB_ENV
+            echo "COMMIT_WITH_CONFLICTS=false" >> $GITHUB_ENV
           else
             URL_PREFIX=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${BRANCH}/
 
@@ -153,7 +153,7 @@ jobs:
             # 先頭行に # Conflict files を挿入
             sed --in-place '1i# Conflict files' ../merge_output.txt
             
-            echo 'COMMIT_WITH_CONFLICTS=true' >> $GITHUB_ENV
+            echo "COMMIT_WITH_CONFLICTS=true" >> $GITHUB_ENV
             
           fi
           
