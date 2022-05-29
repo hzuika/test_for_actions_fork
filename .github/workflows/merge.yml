@@ -22,6 +22,8 @@ jobs:
       # checkoutしないと，ワークフロー時の環境にこのリポジトリが存在しないことになる．      
       - uses: actions/checkout@v3
       
+      - run: echo ${{ github }}
+      
       - run: ls
       
       - run: git status
