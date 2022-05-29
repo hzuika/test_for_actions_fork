@@ -211,7 +211,8 @@ jobs:
         if: ${{ env.CONFLICTS_NUM != 0 }}
         run: git commit -am "Merge upstream with conflict marker"
         
-      - run: |
+      - name: "[DEBUG] Check repo branch name"
+        run: |
          echo $GITHUB_BASE_REF
          echo $GITHUB_HEAD_REF
          echo $GITHUB_REF_NAME
