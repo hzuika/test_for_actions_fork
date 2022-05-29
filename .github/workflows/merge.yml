@@ -101,8 +101,17 @@ jobs:
           echo "${{ steps.merge.outputs.STDERR }}"
 
       - run: git ls-files -u
+      
+      - run: git ls-files -u  | cut -f 1
+      
+      - run: git ls-files -u  | cut -f 2
+      
+      - run: git ls-files -u  | cut -f 2 | sort
 
-      - run: git ls-files -u  | cut -f 2 | sort -u
+      # マージしたときにコンフリクトのあるファイルはコミットされない
+      # コミットされていないファイル一覧から，ファイル名をカットして，重複を削除して並び替え
+      - name: Show conflict files
+        run: git ls-files -u  | cut -f 2 | sort -u
 
       # 終了コードによって，標準出力か，標準エラー出力のどちらかを環境変数に格納する．
       # 一度テキストファイルに格納してから，環境変数に格納する．
@@ -113,6 +122,8 @@ jobs:
         run: |
           echo "${{ steps.merge.outputs.STDOUT }}" > ../merge_output.txt
           echo "${{ steps.merge.outputs.STDERR }}" >> ../merge_output.txt
+          
+          git ls-files -u  | cut -f 2 | sort -u > ../merge_output.txt
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
