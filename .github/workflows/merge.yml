@@ -11,6 +11,7 @@ env:
   UPSTREAM_URL: https://github.com/snowatfeet/test_for_actions.git
   USER_EMAIL: 39191601+hzuika@users.noreply.github.com
   USER_NAME: hzuika
+  MERGE_COMMAND: git merge upstream/main
   
 jobs:
   auto_merge:
@@ -87,9 +88,11 @@ jobs:
       # github-scriptsを使って，終了コード，標準出力，標準エラー出力を変数に格納する．
       - name: Merge upstream
         uses: actions/github-script@v6
+        env:
+          COMMAND: ${{ env.MERGE_COMMAND }}
         with:
           script: |
-            const command = 'git merge upstream/main'
+            const { command } = process.env
             const result = await exec.getExecOutput(command, [], {
               ignoreReturnCode: true,
             })
