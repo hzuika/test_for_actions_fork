@@ -1,0 +1,41 @@
+# Upstreamブランチからコンフリクトマーカーをつけたままマージしてプルリクエストを作成
+
+name: Merge upstream, Create pull request
+
+on:
+  # Actions タブから手動でこのワークフローを実行することを許可する．
+  workflow_dispatch:
+  
+env:
+  BRANCH_PREFIX: auto_merge_
+  
+jobs:
+  auto_merge:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+      - run: |
+         echo "$
+    
+      - run: |
+         echo "A_ENV=Hello" >> $GITHUB_ENV
+         echo "$A_ENV"
+         
+      - run: |   
+         echo "B_ENV=0" >> $GITHUB_ENV
+         echo "$B_ENV"
+         echo `$B_ENV`
+         echo '$B_ENV'
+         echo "${B_ENV}"
+         
+      - run: |
+         C_LOCAL=0
+         echo "$C_LOCAL"
+         
+         echo "C_ENV=$(echo $C_LOCAL)$" >> $GITHUB_ENV
+         echo "$C_ENV"
+         echo '$C_ENV'
+         echo `$C_ENV`
+         echo ${C_ENV}
