@@ -26,10 +26,11 @@ jobs:
       
 #       - run: echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/"
       
-      - run: ls
-      
-      - run: git status
-      
+      - name: "[DEBUG] Check Repo"
+        run: |
+          cat $(ls -al)
+          cat $(git status)
+            
       # (マージ)コミットするときに必要なgit configを設定する．      
       - name: Set git config for merge commit
         run: |
@@ -52,7 +53,7 @@ jobs:
           echo "MIN=${T:10:2}" >> $GITHUB_ENV
           echo "SEC=${T:12:2}" >> $GITHUB_ENV
           
-      - name: Show current time
+      - name: "[DEBUG] Show current time"
         run: echo "${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
           
       # ブランチ名は別のrunでも使用するので環境変数に入れる．
@@ -96,7 +97,7 @@ jobs:
             core.setOutput('STDERR', result.stderr)
         id: merge
       
-      - name: Show merge output
+      - name: "[DEBUG] Show merge output"
         run: |
           echo "Exit code: ${{ steps.merge.outputs.EXIT_CODE }}"
           
@@ -108,7 +109,7 @@ jobs:
           
           echo "${{ steps.merge.outputs.STDERR }}"
 
-      - name: Check git ls-files
+      - name: "[DEBUG] Check git ls-files"
         run: 
           echo "Unmerged files"
           
@@ -150,7 +151,8 @@ jobs:
           git ls-files --unmerged | cut --fields=2 | sort --unique > ../merge_output.txt
           cat ../merge_output.txt
       
-      - run: |
+      - name: "[DEBUG] Check word line count in text file"
+        run: |
           echo "Byte count"
       
           echo "$(cat ../merge_output.txt | wc --bytes)"
@@ -171,7 +173,8 @@ jobs:
           #echo "CONFLICTS_NUM='${NUM}'" >> $GITHUB_ENV
           #echo "CONFLICTS_NUM=${NUM}" >> $GITHUB_ENV
       
-      - run: |    
+      - name: "[DEBUG] Show conflicts num"
+        run: |    
           echo "${{ env.CONFLICTS_NUM }}"
           echo "$CONFLICTS_NUM Conflicts"
           echo "${{ format('{0} Conflicts', env.CONFLICTS_NUM) }}"
@@ -204,13 +207,12 @@ jobs:
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
-      - name: Show merge output
+      - name: "[DEBUG] Show merge output"
         run: echo ${{ env.MERGE_OUTPUT }}
       
-      - name: Git status
-        run: git status
-        
-      - run: git show
+      - name: "[DEBUG] Git status"
+        run: |
+          git status
       
       # コンフリクトマーカーごとコミットする．          
       - name: Commit merge with conflict marker
