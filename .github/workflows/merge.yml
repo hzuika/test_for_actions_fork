@@ -24,6 +24,8 @@ jobs:
       
       - run: echo ${{ github }}
       
+      - run: echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/"
+      
       - run: ls
       
       - run: git status
