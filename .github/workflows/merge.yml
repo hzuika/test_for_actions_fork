@@ -9,7 +9,6 @@ on:
 env:
   BRANCH_PREFIX: auto_merge_
   UPSTREAM_URL: https://github.com/snowatfeet/test_for_actions.git
-  ORIGIN_REPO: hzuika/test_for_actions_fork
   USER_EMAIL: 39191601+hzuika@users.noreply.github.com
   USER_NAME: hzuika
   
