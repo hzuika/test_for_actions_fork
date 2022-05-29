@@ -112,7 +112,7 @@ jobs:
       
       - run: git ls-files -u  | cut -f 2 | sort
       
-      - run: git ls-files --unmerged | cut --fields=2 | sort -- unique | wc --chars
+      - run: git ls-files --unmerged | cut --fields=2 | sort --unique | wc --chars
 
       # マージしたときにコンフリクトのあるファイルはコミットされない
       # コミットされていないファイル一覧から，ファイル名をカットして，重複を削除して並び替え
@@ -134,20 +134,25 @@ jobs:
           git ls-files -u  | cut -f 2 | sort -u > ../merge_output.txt
       
       - run: |
-          echo $(wc --bytes ../merge_output.txt | cut --fields=1)
+          echo $(cat ../merge_output.txt | wc --bytes)
       
       - run: |
-          URL_PREFIX=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${BRANCH}/
-          
-          sed "s@^@- $URL_PREFIX@g" ../merge_output.txt
-          sed -r "s/(.*)/- [\1](\1)/g" ../merge_output.txt
-          sed -r "s@(.*)@- [\1](\1)@g" ../merge_output.txt
-          sed "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
+          if [[ $(cat ../merge_output.txt | wc --bytes) == 0 ]]; then
+            echo "# Successfully merged" > ../merge_output.txt
+          else
+            URL_PREFIX=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${BRANCH}/
 
-          # - [ファイル名](URL/ファイル名) に変換
-          sed -i "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
-          # 先頭行に # Conflict files を挿入
-          sed -i '1i# Conflict files' ../merge_output.txt
+            sed "s@^@- $URL_PREFIX@g" ../merge_output.txt
+            sed -r "s/(.*)/- [\1](\1)/g" ../merge_output.txt
+            sed -r "s@(.*)@- [\1](\1)@g" ../merge_output.txt
+            sed "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
+
+            # - [ファイル名](URL/ファイル名) に変換
+            sed -i "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
+            # 先頭行に # Conflict files を挿入
+            sed -i '1i# Conflict files' ../merge_output.txt
+          fi
+          
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
       # マージ出力結果を表示する．
