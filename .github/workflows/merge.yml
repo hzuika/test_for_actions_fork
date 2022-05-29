@@ -86,6 +86,7 @@ jobs:
             const result = await exec.getExecOutput(command, [], {
               ignoreReturnCode: true,
             })
+            console.log(result)
             core.setOutput('EXIT_CODE', result.exitCode)
             core.setOutput('STDOUT', result.stdout)
             core.setOutput('STDERR', result.stderr)
