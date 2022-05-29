@@ -92,8 +92,8 @@ jobs:
           COMMAND: ${{ env.MERGE_COMMAND }}
         with:
           script: |
-            const { command } = process.env
-            const result = await exec.getExecOutput(command, [], {
+            const { COMMAND } = process.env
+            const result = await exec.getExecOutput(COMMAND, [], {
               ignoreReturnCode: true,
             })
             console.log(result)
