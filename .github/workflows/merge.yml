@@ -145,6 +145,7 @@ jobs:
           echo "CONFLICTS_NUM=$(cat ../merge_output.txt | wc --lines)" >> $GITHUB_ENV
           
           echo "${{ env.CONFLICTS_NUM }}"
+          echo "$CONFLICTS_NUM Conflicts"
           
           echo "${{ env.CONFLICTS_NUM == 0 }}"
           
@@ -155,7 +156,7 @@ jobs:
       # sed -i がないと上書き保存されない．
       - name: Create pull request body
         run: |
-          if [[ $(cat ../merge_output.txt | wc --bytes) == 0 ]]; then
+          if [[ $CONFLICTS_NUM == 0 ]]; then
             echo "# Successfully merged" > ../merge_output.txt
             echo "COMMIT_WITH_CONFLICTS=false" >> $GITHUB_ENV
           else
