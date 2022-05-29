@@ -12,6 +12,7 @@ env:
   USER_EMAIL: 39191601+hzuika@users.noreply.github.com
   USER_NAME: hzuika
   MERGE_COMMAND: git merge upstream/main
+  ORIGIN_BASE_REPO: main
   
 jobs:
   auto_merge:
@@ -160,7 +161,7 @@ jobs:
           
           echo "$(cat ../merge_output.txt | wc --lines)"
           
-      # コンフリクト数をチェックする．
+      # コンフリクト数を環境変数に格納する．
       - name: Count conflicts as env var
         run: |       
           echo "CONFLICTS_NUM=$(cat ../merge_output.txt | wc --lines)" >> $GITHUB_ENV
@@ -173,26 +174,30 @@ jobs:
           echo "${{ toJSON(env.CONFLICTS_NUM) }}"
           echo "${{ env.CONFLICTS_NUM == 0 }}"
           
+      - name: "[DEBUG] Check sed command"
+        if: ${{ env.CONFLICTS_NUM != 0 }}
+        run: |     
+            sed "s@^@- $URL_PREFIX@g" ../merge_output.txt
+            sed -r "s/(.*)/- [\1](\1)/g" ../merge_output.txt
+            sed -r "s@(.*)@- [\1](\1)@g" ../merge_output.txt
+            sed "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
+          
       # コンフリクトファイル一覧にURLを付けたり，タイトルを付けたりして，プルリクエストの本文を作る．
       # コンフリクトがない場合とある場合で条件分けを行う．
       # コンフリクトがある場合は，コミットが必要なので，環境変数に必要かどうか記録しておく．
       # sed だと標準出力するだけになる．
       # sed -i がないと上書き保存されない．
+      
+      # コンフリクトがある場合，
+      # - [ファイル名](URL/ファイル名) に変換
+      # 先頭行に # Conflict files を挿入
       - name: Create pull request body
         run: |
           if [[ $CONFLICTS_NUM == 0 ]]; then
             echo "# Successfully merged" > ../merge_output.txt
           else
             URL_PREFIX=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${BRANCH}/
-
-            sed "s@^@- $URL_PREFIX@g" ../merge_output.txt
-            sed -r "s/(.*)/- [\1](\1)/g" ../merge_output.txt
-            sed -r "s@(.*)@- [\1](\1)@g" ../merge_output.txt
-            sed "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
-
-            # - [ファイル名](URL/ファイル名) に変換
             sed --in-place "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
-            # 先頭行に # Conflict files を挿入
             sed --in-place '1i# Conflict files' ../merge_output.txt            
           fi
           
@@ -229,4 +234,4 @@ jobs:
           PR_BODY="${{ env.MERGE_OUTPUT }}"
           TIME="${YEAR}/${MONTH}/${DAY} ${HOUR}:${MIN}:${SEC}"
           PR_TITLE="Auto merge upstream (${TIME})"
-          gh pr create --head ${{ env.BRANCH }} --base "main" --repo "$GITHUB_REPOSITORY" --title "${PR_TITLE}" --body "${PR_BODY}"
+          gh pr create --head ${{ env.BRANCH }} --base $ORIGIN_BASE_REPO --repo "$GITHUB_REPOSITORY" --title "${PR_TITLE}" --body "${PR_BODY}"
