@@ -24,6 +24,9 @@ jobs:
          echo "A_ENV=Hello" >> $GITHUB_ENV
          echo "$A_ENV"
          
+      - run: |
+         echo "$A_ENV"
+         
       - run: |   
          echo "B_ENV=0" >> $GITHUB_ENV
          echo "$B_ENV"
@@ -40,3 +43,8 @@ jobs:
          echo '$C_ENV'
          echo `$C_ENV`
          echo ${C_ENV}
+
+      - env:
+          D_LOCAL: $A_ENV
+        run: |
+          echo $D_LOCAL
