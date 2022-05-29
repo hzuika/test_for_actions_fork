@@ -147,8 +147,8 @@ jobs:
         run: |
         
           echo ${{ steps.merge.outputs.STDOUT }}
-          echo ${{ contains(steps.merge.outputs.STDOUT, '\n') }}
-          echo ${{ contains(steps.merge.outputs.STDOUT, '\0') }}
+          echo ${{ contains(steps.merge.outputs.STDOUT, '\\n') }}
+          echo ${{ contains(steps.merge.outputs.STDOUT, '%0A') }}
           
           if [[ "${{ env.MERGE_OUTPUT }}" == "Already up to date." ]]; then
             echo "This repository is up to date."
