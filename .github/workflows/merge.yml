@@ -118,17 +118,16 @@ jobs:
       # テキストファイルはGitの対象にならないように親ディテクトリに保存する．
       # echo 'MERGE_OUTPUT=${{ steps.merge.outputs.STDOUT }}' >> $GITHUB_ENV だとエラーになる．
       # シングルクォーテーションをダブルクォーテーションに変えてもエラー
+      
+      # sed だと標準出力するだけ
+      # sed -i がないと上書き保存されない
       - name: Set merge output as env var
         env:
           FILENAME: ../merge_output.txt
-        run: |
-          echo "${{ steps.merge.outputs.STDOUT }}" > $FILENAME
-          echo "${{ steps.merge.outputs.STDERR }}" >> $FILENAME
-          
-          # echo "Conflict files" > ../merge_output.txt
-          
+        run: |          
           git ls-files -u  | cut -f 2 | sort -u > ../merge_output.txt
-          sed "s/^/- /g" ../merge_output.txt
+          
+          sed -i "s/^/- /g" ../merge_output.txt
           sed -i '1i# Conflict files' ../merge_output.txt
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
       
