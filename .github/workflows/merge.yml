@@ -130,6 +130,10 @@ jobs:
           FILENAME: ../merge_output.txt
         run: |          
           git ls-files -u  | cut -f 2 | sort -u > ../merge_output.txt
+      
+      - run: |
+          echo ${#(cat ../marge_output.txt)}
+      
       - run: |
           URL_PREFIX=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${BRANCH}/
           
