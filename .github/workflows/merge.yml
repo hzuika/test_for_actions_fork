@@ -26,6 +26,13 @@ jobs:
          echo "FUGA=0" >> $GITHUB_ENV
          echo "$FUGA"
 
+         PIYO=0
+         echo "$PIYO"
+         
+         echo "A=$(echo $PIYO)$" >> $GITHUB_ENV
+         echo "$A"
+         
+         echo `$FUGA`
     
       # checkoutしないと，ワークフロー時の環境にこのリポジトリが存在しないことになる．      
       - uses: actions/checkout@v3
