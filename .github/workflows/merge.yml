@@ -131,7 +131,7 @@ jobs:
         env:
           FILENAME: ../merge_output.txt
         run: |          
-          git ls-files -u  | cut -f 2 | sort -u > ../merge_output.txt
+          git ls-files --unmerged | cut --fields=2 | sort --unique > ../merge_output.txt
       
       - run: |
           echo $(cat ../merge_output.txt | wc --bytes)
@@ -148,9 +148,14 @@ jobs:
             sed "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
 
             # - [ファイル名](URL/ファイル名) に変換
-            sed -i "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
+            sed --in-place "s@\(.*\)@- [\1]($URL_PREFIX\1)@g" ../merge_output.txt
             # 先頭行に # Conflict files を挿入
-            sed -i '1i# Conflict files' ../merge_output.txt
+            sed --in-place '1i# Conflict files' ../merge_output.txt
+            
+            echo 'COMMIT_WITH_CONFLICTS=true' >> $GITHUB_ENV
+            
+            echo ${{ env.COMMIT_WITH_COMFLICTS == 'true' }}
+            
           fi
           
           echo 'MERGE_OUTPUT=$(cat ../merge_output.txt)' >> $GITHUB_ENV
